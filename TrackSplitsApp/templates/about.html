@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}About - Track Splits{%endblock%}
+
+
+{% block title %}
+<h1>About</h1>
+{% endblock %}
+
+{% block content %}
+   
+     <p>This is a small app to analyse GPS data from track races and calculate split times at arbitrary intervals. We currently only support GPS data from Strava, but analysis of arbitrary .gpx files should be coming soon. </p>
+     
+     
+{% endblock %}
+
+
+{% block belowJumbotron %}
+
+<div class="row">
+        <div class="col-sm-8   ">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Planned improvements</h3>
+            </div>
+            <div class="panel-body">
+             <ul>
+             
+     <li>Handle GPS tracks other than Strava</li>
+     </ul>
+
+            </div>
+         </div>
+         
+         <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Troubleshooting and FAQs</h3>
+            </div>
+            <div class="panel-body">
+             <b>Searching for activities doesn't work!</b> - your browser may be stopping the code from running. For example, in Google Chrome check for an icon at the right end of the address bar complaining about scripts from unidentified sources.
+            </div>
+         </div>
+         
+       </div>
+       
+        <div class="col-sm-4    ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Bugs, suggestions and more info</h3>
+            </div>
+            <div class="panel-body">
+            <p>More details of the algorithm used to complete split times, including Python code, can be found on <a href="https://github.com/jrgparkinson/track-splits/">GitHub</a>.</p>
+            
+            <p>If you encounter any bugs or issues, or have any suggestions, then please <a href="https://github.com/jrgparkinson/track-splits/issues">post these on GitHub</a> too.</p>
+            </div>
+         </div>
+         
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Non-commercial</h3>
+            </div>
+            <div class="panel-body">
+            <p>This app is free to use, and is not designed to make any money. There are no adverts on this site, which is hosted for free by <a href="www.heroku.com">Heroku</a>.</p>
+            </div>
+         </div>
+         
+       </div>
+       
+     </div>
+
+
+
+
+{% endblock %}

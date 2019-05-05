@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+
+
+{% block pageTitle %}Choose an activity - Track Splits{%endblock%}
+
+
+{% block title %}
+<div class="row"> 
+<div class="col-sm-6"> <h2>Choose an activity </h2> 
+</div>
+<div class="col-sm-6"> <div class="alert alert-info" role="alert">
+         Can't find an activity? <!-- <button type="button" class="btn btn-default" onClick="">Reload all</button>-->
+         <a href="/activities/reload/week/" class="btn btn-info" role="button" id="reload-week" onclick="show_loading(this, 'loading-week');">Reload last week</a>
+         <button class="btn btn-md btn-warning loading" id="loading-week"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+<a href="/activities/reload/all/" class="btn btn-info" role="button" id="reload-all" onclick="show_loading(this, 'loading-all');">Reload all</a> 
+ <button class="btn btn-md btn-warning loading" id="loading-all"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+      </div>
+</div>
+</div>
+{% endblock %}
+
+{% block content %}     
+    
+      
+  
+   <div class="row">
+        <div class="col-sm-12    ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Search activities</h3>
+            </div>
+            <div class="panel-body">
+   
+   
+   
+     <form class="form-horizontal">
+
+  <div class="form-group">
+    <!--<label for="activity-search" class="control-label col-xs-4  col-form-label col-form-label-lg">Search activities: </label>-->
+    <div class="col-xs-10">
+    <input class="form-control form-control-lg" type="text" id="activity-search">
+    </div>
+     
+  </div>
+  
+  </form>
+  
+  </div>
+  </div>
+  </div>
+  </div> <!--row-->
+  
+  <div class="row">
+        <div class="col-sm-12    ">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Select activity from list</h3>
+            </div>
+            <div class="panel-body">
+  
+  <table class="table">
+
+     
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Activity name</th>
+      <th scope="col">Moving time</th>
+    </tr>
+  </thead>
+  <tbody class="table-activities-list">
+  
+{%for a in activities%}
+<tr>
+   <td>{{a.date}}</td>
+   <td><a href="/activity/{{a.activity_id}}/">{{ a.name }}</td>
+<td>   {{ a.moving_time }} </td>
+   
+   </tr>
+{% endfor %}
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div> <!--row-->
+
+</div>
+
+{% endblock %}

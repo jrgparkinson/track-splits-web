@@ -1,0 +1,7 @@
+static: python manage.py collectstatic
+migrate: python manage.py migrate
+makemigrate: python manage.py makemigrations
+webinsecure: python manage.py runserver --insecure
+start: python manage.py startapp TrackSplits
+app: python manage.py startapp TrackSplitsApp
+web: python manage.py runserver 0.0.0.0:5000

@@ -1,0 +1,12 @@
+
+ {% for s in splits %}
+  <tr>
+      <td>{{ s.distance }}</td>
+      <td>{{s.total_mins}}:{{s.total_secs}}</td>
+      <td>{{s.split_mins}}:{{s.split_secs}}</td>
+    </tr>
+{% endfor %}
+
+ {% if not splits %}
+ No splits available. Check the options above and try again.
+ {% endif %}

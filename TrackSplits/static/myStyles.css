@@ -1,0 +1,175 @@
+#activity-search {
+width:100%;
+}
+
+
+
+@media (max-width: 767px) {
+    .navbar-fixed-top {
+        position: relative;
+        top: auto;
+    }
+    .navbar-collapse {
+        max-height: none;
+    }
+    body {
+        margin: 0px;
+        /*padding: 0px;*/
+    }
+}
+
+#lap-index {
+    height:50px;
+}
+#view-on-strava {
+    color:#FC4C02;
+}
+
+div#loading, .loading {
+    display: none;
+    cursor: wait;
+    }
+    
+    #loading {
+        display: none;
+        cursor: wait;
+    }
+    
+    #distance-plot {
+        height:450px;
+        width:100%;
+    }
+    
+    #map {
+        height: 450px;
+        width: 100%;
+      }
+    #legend {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    padding: 10px;
+    margin: 10px;
+    /*border: 2px solid #000;*/
+    font-size:14px;
+    font-weight: bold;
+    border-radius:2px;
+  }
+  
+  #fit-legend{
+      color: #1200ba;
+  }
+  #GPS-legend{
+      color:#FF0000;
+      
+  }
+    .table-nonfluid {
+   width: auto !important;
+}
+
+.col-form-label-lg, .form-control-lg{
+    font-size:20px;
+}
+
+.col-form-label-md, .form-control-md{
+    font-size:18px;
+}
+
+body {
+  padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+  position: static;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+  width: auto;
+}
+
+ 
+ div.jumbotron {
+       margin-top:70px;
+   }
+   
+ /* .navbar-header {
+       padding-left:50px;
+       padding-right:50px;
+   }*/
+   
+   
+ @media (max-width: 767px) {
+   div.jumbotron {
+       margin-top:0px;
+   }
+   
+   /*
+   body {
+       padding-left:0px;
+       padding-right:0px;
+       margin-left:0px;
+       margin-right:-60px;
+   }
+   
+   .navbar-fixed-top{
+       
+   }
+   */
+     /*.navbar-header */
+     .navbar-header, .navbar-collapse{
+       margin-right: 0px;
+       padding-right:40px;
+       padding-left:40px;
+   }
+   
+   body {
+       padding-left:0px;
+       padding-right:0px;
+       margin-left:0px;
+       margin-right:0px;
+   }
+   
+   .container {
+       padding-left:5px;
+       padding-right:5px;
+   }
+   
+    #main-jumbo  {
+        padding:5px;
+    }
+    
+    .col-sm-12 {
+        padding-left:0px;
+        padding-right:0px;
+    }
+   
+   .row { 
+   margin:0px;
+   }
+   
+   div.options-panel-body {
+       padding:10px;
+   }
+   
+   .form-control-md, .col-form-label-md {
+       margin-top:10px;
+   }
+ }
+ 
+ @media (max-width:520)
+ {
+ }
+ 
+.powered-by-strava {
+     max-width: 80%;
+}
+ 
+ 
+div.table-container {
+    display: inline-block;
+}

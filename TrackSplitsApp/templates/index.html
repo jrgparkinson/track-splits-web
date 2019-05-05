@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block pageTitle %}Track splits analysis{%endblock%}
+
+{% block additionalHeadItems %}
+
+{% endblock %}
+
+{% block title %}
+<h1>Track Splits Analysis</h1>
+{% endblock %}
+
+{% block content %}
+    {% if stravaSessionExists %}
+    
+    {% if firstTime %}
+     <p> Hello {{athlete.firstname}}. Click the button below to get started. </p>
+    {% else %}
+       <p> Welcome back, {{athlete.firstname}}. </p> 
+     {% endif %}
+
+       <div id="preLoading">
+       <a href="/activities/">
+           <button type="button" class="btn btn-primary" onClick="loading();">Choose an activity from Strava</button>
+       </a>
+
+        or
+<a href="/uploadActivity"> <button type="button" class="btn btn-primary">Upload a file</button> </a> </div>
+       <div id="loading"><button class="btn btn-md btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button></div>
+        
+      <!--<p> <a href="{{ authenticateLink }}"><img src='{% static "/btn_strava_connectwith_orange/btn_strava_connectwith_orange.png" %}' alt="Re-connect with Strava" /></a><p>-->
+     
+    {% else %}
+     <p>Get split times for your track races</p>
+     <p> <a href="{{ authenticateLink }}"><img src='{% static "/btn_strava_connectwith_orange/btn_strava_connectwith_orange.png" %}' alt="Connect with Strava" /></a>
+or
+<a href="/uploadActivity"> <button type="button" class="btn btn-primary">Upload a file</button> </a>
+<p>
+     
+     {% endif %}
+{% endblock %}
+

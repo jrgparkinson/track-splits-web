@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block pageTitle %}Splits for {{activity.name}}{%endblock%}
+
+
+{% block title %}
+<h2> {{activity.name}}
+    {% if isStrava %} <a href="http://www.strava.com/activities/{{activity.id}}" id="view-on-strava">(View on Strava)</a>
+    {% else %}
+    <a href="/uploadFile">(Upload a different file)</a>
+    {% endif %}</h2>
+{% endblock %}
+
+{% block content %}
+
+{% if not successfulFit %}
+<div class="row"  id="fitting-notification">
+        <div class="col-sm-12    ">
+          <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title">Fitting error</h3>
+            </div>
+            <div class="panel-body">
+            <p>Unable to produce a good fit to the GPS data, is this definitely a track race?</p>
+            </div>
+      </div>
+   </div>
+</div>
+ 
+{% else %}
+<div class="row" id="fitting-notification">
+        <div class="col-sm-12    ">
+          <div class="panel panel-warning">
+            <div class="panel-heading">
+              <h3 class="panel-title">Activity fitting complete</h3>
+            </div>
+            <div class="panel-body">
+            <p>The details below were detected automatically. If they are incorrect, you can change them yourself.</p>
+            </div>
+      </div>
+   </div>
+</div> 
+ 
+{% endif %}
+   
+   
+    <div class="row">
+        <div class="col-sm-12    ">
+          <div class="panel panel-default">
+            
+            
+             <div class="panel-heading">
+              <h3 class="panel-title"> <a data-toggle="collapse" href="#options">Options and parameters (click to view/change)</a></h3>
+            </div>
+            <div class="panel-collapse collapse" id="options">
+          <div class="panel-body options-panel-body">
+   
+   
+<form class="form-horizontal">
+
+<div class="form-group">
+
+
+    <label for="race" class="pull-left control-label col-xs-2 col-form-label col-form-label-md">Race: </label>
+    <div class="col-xs-5">
+     <select class="form-control form-control-md" id="race" onchange="race_changed(this);">
+     {% for r in RACES %}
+     <option value="r.distance" {% if r.display_name == race.display_name %}selected{%endif%}>{{r.display_name}}</option>
+     {% endfor %}
+      
+     </select>
+     </div>
+     
+       <div class="col-xs-4">
+       <label class="form-check-label">
+    <input class="form-check-input" type="checkbox" id="auto-update-races" value="" checked>
+    Automatically update lap length, race distance, and splits?
+  </label></div>
+     
+ 
+  </div>
+  
+  
+  <div class="form-group">
+  <label for="race-dist" class="pull-left control-label col-xs-2  col-form-label col-form-label-md">Distance (m):</label>
+     <div class="col-xs-4">
+    <input class="form-control form-control-md" type="text" id="race-dist" value="{{ race_dist }}" disabled>
+    </div>
+   <!-- <div class="col-xs-1 col-form-label "></div>--><!--padding-->
+    
+    <label for="lap-length" class="pull-left control-label col-xs-2  col-form-label col-form-label-md">Lap length (m): </label>
+    <div class="col-xs-3">
+    <input class="form-control form-control-md" type="text" id="lap-length" value="{{ track_length }}" disabled>
+    </div>
+    
+    <div class="col-xs-1 col-form-label col-form-label-md"><a href="javascript:makeLapLengthDistanceEditable();">Edit</a></div>
+     
+    
+  </div>    
+
+
+  <!--
+  
+  <div class="form-group">
+    <label for="start-location" class="control-label col-xs-2  col-form-label-md">Start location: </label>
+    <div class="col-xs-4">
+    <input class="form-control form-control-md" type="text" id="start-location" value="{{ start_location }}">
+     </div>
+     <div class="col-xs-4 col-form-label col-form-label-md">metres after the start/finish</div>
+  </div>
+  -->
+  
+  <div class="form-group">
+    <label for="split-distances" class="pull-left control-label col-xs-2  col-form-label col-form-label-md">Splits: </label>
+     <div class="col-xs-6">
+      <!--<div class="col-xs-6">
+      <input class="form-control form-control-md" type="text" id="split-distances" value="{% for s in splits %}{{ s.distance }}{%if not forloop.last%},{%endif%}{% endfor %}">-->
+      <textarea class="form-control form-control-md" rows="2" id="split-distances">{% for s in splits %}{{ s.distance }}{%if not forloop.last%},{%endif%}{% endfor %}</textarea>
+      </div>
+      
+      <div class="col-xs-2">
+      <button type="button" class="btn btn-default" onClick="update_splits_options(200);">200m</button>
+      <button type="button" class="btn btn-default" onClick="update_splits_options(400);">400m</button>
+      <button type="button" class="btn btn-default" onClick="update_splits_options(1000);">1k</button>
+      </div>
+ 
+  </div>
+  
+  {% if lap_index > 0 %}
+     <div class="form-group">
+
+
+    <label for="lap-index" class="pull-left control-label col-xs-2 col-form-label col-form-label-md">Lap: </label>
+    <div class="col-xs-9">
+     <select class="form-control form-control-md" id="lap-index">
+     {% for l in laps %}
+     <option value="{{l.lap_index}}" {% if l.lap_index == lap_index %}selected{%endif%}>{{l.name}} ({{l.formatted_time}}, {{l.distance}}m)</option>
+     {% endfor %}
+      
+     </select>
+     </div>
+     
+  </div>
+    {% endif %}
+  
+   <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-6">
+              <button type="button" class="btn btn-default" onClick="update_splits_table();">Update</button>
+               <div id="loading"><button class="btn btn-md btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button></div>
+               
+        </div>
+    </div>
+    
+    
+    
+  
+</form>
+
+</div><!--panel body-->
+</div><!-- collapse-->
+</div>
+</div>
+</div> <!--row-->
+   
+   <div id="activity-reloadable">
+   {% include 'activity-reloadable.html' %}
+     <div>
+     
+     <div class="row">
+     
+     </div>
+
+
+
+
+{% endblock %}

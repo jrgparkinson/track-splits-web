@@ -1,0 +1,335 @@
+
+  
+  <div class="row">
+  
+ 
+      
+        
+        <div class="col-sm-4   ">
+        
+        
+        
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Splits</h3>
+            </div>
+            <div class="panel-body">
+           
+              <table class="table">
+
+     
+  <thead>
+    <tr>
+      <th scope="col">Distance (m)</th>
+      <th scope="col">Overall time</th>
+      <th scope="col">Split time</th>
+    </tr>
+  </thead>
+  <tbody class="table-splits-body">
+  
+       {% include "splits_table.html" %}
+ 
+    </tbody>
+    </table>
+    
+            </div>
+          </div>
+        
+
+       <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+       <script>
+       var math = document.getElementById("fit-details");
+MathJax.Hub.Queue(["Typeset",MathJax.Hub,math]);
+</script>
+          <div class="panel panel-warning">
+            <div class="panel-heading">
+              <h3 class="panel-title">Fit details</h3>
+            </div>
+            <div class="panel-body" id="fit-details">
+              Fit error: <br>
+              $$ \begin{eqnarray}
+              \epsilon = \frac{1}{N} \sum_{i} \| \mathbf{x}_{GPS, i} - \mathbf{x}_{track, i} \| \nonumber \\
+              = \pm {{ fitError.distance }} \text{ m } \implies \pm {{ fitError.time }} \text{ s} \nonumber
+\end{eqnarray}              $$
+             
+              Conversion from distance to time based on the average speed {{fitError.speed}} ms\(^{-1}\) = {{fitError.speedMPH}} mph. \(\mathbf{x}_{track, i}\) is the point on the track closest to \(\mathbf{x}_{GPS, i}\). More details of the fitting procedure are available <a href="https://www.sharelatex.com/read/nchtbthgcwjh">here</a>.
+              <br> <br>
+              
+              <a href="https://github.com/jrgparkinson/track-splits/issues">Report a bad fit on GitHub</a>
+
+             
+            </div>
+          </div>
+        
+          
+        
+         
+        </div><!-- /.col-sm-4 -->
+        
+        <div class="col-sm-8">
+        
+        
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Map</h3>
+            </div>
+            <div class="panel-body">
+            
+            
+            
+              <div id="map"></div>
+              <div id="legend"></div>
+    <script>
+
+      
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 18, // seems about right for an athletics track
+          center: {lat: {{activity_centre.0}}, lng: {{activity_centre.1}} },
+          mapTypeId: 'satellite'
+        });
+        map.setTilt(0); // don't tilt the map
+
+        var GPS_track_data = [
+          
+          {% for ll in activity_latlng %}
+           {lat: {{ll.0}}, lng: {{ll.1}} },
+          {% endfor %}
+        ];
+        var GPS_track = new google.maps.Polyline({
+          path: GPS_track_data,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.5,
+          strokeWeight: 2
+        });
+        
+        var fit_data = [
+          
+          {% for ll in fit_latlng %}
+           {lat: {{ll.0}}, lng: {{ll.1}} },
+          {% endfor %}
+        ];
+        var fit_track = new google.maps.Polyline({
+          path: fit_data,
+          geodesic: true,
+          strokeColor: '#1200ba',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+        fit_track.setMap(map);
+        GPS_track.setMap(map);
+        
+        
+        var legend = document.getElementById('legend');
+        
+          var div = document.createElement('div');
+          div.innerHTML = 'GPS data';
+          div.id = 'GPS-legend';
+          legend.appendChild(div);
+          
+          var div2 = document.createElement('div');
+           div2.innerHTML = 'Track fit';
+          div2.id = 'fit-legend';
+          legend.appendChild(div2);
+        
+
+        map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(legend);
+        
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl55vqkBM3WTFOs797RnvsykSelnY1fYs&callback=initMap">
+    </script>
+            </div>
+          </div> <!-- end map -->
+          
+          
+          
+           <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"> <a data-toggle="collapse" href="#distance-plot">Distance plot (click to view)</a></h3>
+            </div>
+            <div class="panel-collapse collapse" id="distance-plot">
+          <div class="panel-body">
+           
+          
+         {% include 'distance_plot.html' %}
+          
+          </div><!--body-->
+          </div> <!-- collapse-->
+          </div><!--panel-->
+          
+          
+          
+           <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+              <a data-toggle="collapse" href="#angle-plot">Track angle fitting (click to view)</a>
+                </h3>
+            </div>
+            <div class="panel-collapse collapse" id="angle-plot">
+          <div class="panel-body">
+          
+         <div id="angle-plot" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+         
+          <script>
+          
+          function hcLabelRender(){
+    var s = this.name;
+    var r = "";
+    var lastAppended = 0;
+    var lastSpace = -1;
+    for (var i = 0; i < s.length; i++) {
+        if (s.charAt(i) == ' ') lastSpace = i;
+        if (i - lastAppended > 20) {
+            if (lastSpace == -1) lastSpace = i;
+            r += s.substring(lastAppended, lastSpace);
+            lastAppended = lastSpace;
+            lastSpace = -1;
+            r += "<br>";
+        }
+    }
+    r += s.substring(lastAppended, s.length);
+    return r;
+}
+
+          $(function () {
+        Highcharts.chart('angle-plot', {
+
+         chart: {
+        type: 'areaspline',
+        zoomType: 'x',
+        panning: true,
+        panKey: 'shift'
+    },
+
+    
+    title: {
+        text: 'Track orientation calculation'
+    },
+
+  // subtitle: {
+   //     text: ''
+   // },
+
+    xAxis: [{
+        title: { text: 'Angle (radians)'},
+        min: -1.5,
+        max: 1.5,
+        plotBands: [{
+    color: 'rgba(255,0,0,0.5)',
+    opacity: 0.3,
+    //label: {text: 'Angles used to determine track orientation',},
+    from: {{accepted_angles_limits.0}}, // Start of the plot band
+    to: {{accepted_angles_limits.1}} // End of the plot band
+  }],
+    }, 
+    /*{
+        title: { text: 'Angle (radians)' },
+        opposite: true,
+        min: -1.5, 
+        max: 1.5
+    }*/
+    ],
+
+    yAxis: [{
+        title: { text: 'Frequency' }
+    }, 
+    /*{
+        title: { text: 'Frequency' },
+        opposite: true,
+        
+    }*/
+    ],
+    
+    
+    legend: {
+        layout: 'vertical',
+      align: 'center',
+        verticalAlign: 'bottom',
+       /* itemStyle: {
+        width: 90 // or whatever
+    },*/
+    labelFormatter: hcLabelRender
+   },
+
+    plotOptions: {
+        spline: {
+            marker: {
+                enabled: false
+            }
+        }
+    },
+    
+     tooltip: {
+     shared: true,
+     //xDateFormat: '%M:%S'
+       
+        },
+        
+        
+
+    series: [
+    
+   
+        {
+    //id: 'usedAngles',
+     data: [ {% for ab in angle_bins_freqs %}[{{ab.0}}, {{ab.1}}]{%if not forloop.last%},{%endif%}{% endfor %}],
+     name: 'Angles',
+     type: 'spline',
+    // yAxis: 1,
+     //   xAxis: 1,
+     visible: true,
+     marker: {  radius: 1.5 },
+     showInLegend: true
+     
+    },
+    {
+    type: 'area',
+    name: 'Angles used to determine track orientation',
+    data: [],
+    showInLegend: true,
+    visible: true,
+    color: 'rgba(255,0,0,0.5)', // to match the plotband
+    },
+    /*
+     {
+    //id: 'usedAngles',
+     data: [ {% for ab in used_angle_bins_freqs %}[{{ab.0}}, {{ab.1}}]{%if not forloop.last%},{%endif%}{% endfor %}],
+     name: 'Used angles',
+     type: 'spline',
+    // yAxis: 1,
+     //   xAxis: 1,
+     visible: true,
+     marker: {  radius: 1.5 },
+     showInLegend: true
+     
+    },
+    
+    */
+
+    ],
+    
+    
+    
+    
+    
+   
+
+});
+    });
+            </script>   
+          
+          </div>
+          </div>
+          </div>
+          
+          
+        </div><!-- /.col-sm-4 -->
+        
+        
+     
+     </div> <!--row-->

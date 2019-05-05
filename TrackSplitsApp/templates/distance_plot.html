@@ -1,0 +1,105 @@
+ <div id="distance-plot" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+         
+          <script>
+          $(function () {
+        Highcharts.chart('distance-plot', {
+
+         chart: {
+        type: 'areaspline',
+        zoomType: 'x',
+        panning: true,
+        panKey: 'shift'
+    },
+
+    
+    title: {
+        text: 'Calculated race progress'
+    },
+
+  // subtitle: {
+   //     text: ''
+   // },
+
+    yAxis: [{
+            title: {
+                text: 'Distance (metres)'
+            },
+        min: 0
+    },
+    {
+    opposite: true,
+            title: {
+                text: 'Speed (m/s)'
+            },
+      
+    }
+   ],
+    
+    xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { // don't display the dummy year
+           millisecond: '%M:%S',
+    second: '%M:%S',
+    minute: '%M:%S',
+    hour: '%M:%S',
+    day: '%M:%S',
+    week: '%M:%S',
+    month: '%M:%S',
+    year: '%M:%S'
+      },
+        title: {
+            text: 'Time (mm:ss)'
+        }
+        }, 
+    legend: {
+        layout: 'vertical',
+      align: 'center',
+        verticalAlign: 'bottom'
+   },
+
+    plotOptions: {
+        spline: {
+            marker: {
+                enabled: false
+            }
+        }
+    },
+    
+     tooltip: {
+     shared: true,
+     xDateFormat: '%M:%S'
+       
+        },
+
+    series: [{
+        name: 'Distance (m)',
+        showInLegend: true,
+        lineWidth: 3, 
+        //yAxis: 1,
+        type: 'areaspline', 
+        fillOpacity:0.3, 
+        //color: Highcharts.getOptions().colors[2],
+        data: [ {% for d in distance_time %}[{{d.time}}, {{d.distance}}]{%if not forloop.last%},{%endif%}{% endfor %}]
+    }
+,
+{
+        name: 'Speed (m/s)',
+        showInLegend: true,
+        lineWidth: 2,
+        yAxis: 1,
+        fillOpacity:0.0,
+        //dashStyle: 'dash',
+        type: 'spline',
+        // For data, take every 4 points to make curve a little smoother
+        data: [ {% for d in distance_time %}
+        {% if forloop.counter|divisibleby:4 %}
+        [{{d.time}}, {{d.speed}}]
+        {%if not forloop.last%},{%endif%}
+        {% endif %}{% endfor %}]
+    }
+    ],
+    
+    
+});
+    });
+            </script>   

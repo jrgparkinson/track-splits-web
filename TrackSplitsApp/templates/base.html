@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/png" href="{% static "/favicon.png" %}"/>
+
+    <title>{% block pageTitle %} {% endblock %}</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="{% static "/bootstrap/css/bootstrap-responsive.css" %}" rel="stylesheet"> 
+    <!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="{% static "myStyles.css" %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static "/bootstrap/css/ie10-viewport-bug-workaround.css" %}" rel="stylesheet">
+
+   
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src='{% static "/bootstrap/js/ie-emulation-modes-warning.js" %} '></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+
+
+<script>
+    $(function(){
+        $('a').each(function(){
+            var currentLocation = window.location.href;
+            var thisHref = $(this).prop('href');
+            if ($(this).prop('href') == window.location.href ||
+            (thisHref.indexOf('/activities/') !== -1 && currentLocation.indexOf('/activity/') !== -1 )) {
+                $(this).addClass('active'); 
+                $(this).parents('li').addClass('active');
+            }
+            
+            
+        });
+    });
+    
+   // <![CDATA[
+        function loading(){
+            $("#loading").show();
+            $("#preLoading").hide();       
+        }
+// ]]>
+
+
+
+ $(document).ready(function(){
+        var location_input=$('#activity-search');
+        location_input.autocomplete({
+          source: "/activity_search/",
+          minLength: 2,
+          select: function(event, ui) {
+            openActivity(ui.item.id);
+        }
+        });
+      } );
+function openActivity(id) {
+    window.location.href = '/activity/' + id + '/';
+}
+
+
+
+    //   keeps same width as box
+      jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+          var ul = this.menu.element;
+          ul.outerWidth(this.element.outerWidth());
+        }
+        
+   
+   function update_splits_options(interval)
+   {
+   race = $('#race option:selected').text();
+   
+   console.log('update_splits_options, race: ' + race)
+   
+    $.get('/splits_lookup/', {split_interval: interval, race: race}, function(data){
+    var d = $.parseJSON(data);
+            console.log(d);
+            $('#split-distances').val(d['splits']);
+               
+    });
+   
+  
+   }
+   
+   
+   function show_loading(el, loadingID) {
+    
+    $(el).hide();
+    $("#" + loadingID).show();
+    
+    }
+
+function update_splits_table() {
+lap_length = $('#lap-length').val();
+ race = $('#race option:selected').text();
+ start_loc = $('#start-location').val();
+ splits = $('#split-distances').val();
+ lap_index = $('#lap-index option:selected').val();
+ 
+ splits = splits.replace(/ /g, ',')
+ splits = splits.replace(/,,/g, ',')
+
+    console.log('lap length: ' + (lap_length)); // sanity check
+    console.log('race distance: ' + (race));
+    console.log('start location: ' + (start_loc));
+    console.log('splits: ' + splits);
+    
+    $("#loading").show();
+    
+    $('#fitting-notification').hide();
+        
+    $('#activity-reloadable').html('').load(
+        "/update_splits_table?lap_length=" + (lap_length) + "&race=" + (race) + "&start_loc=" + (start_loc) + "&lap_index=" + lap_index + "&splits=" + (splits))
+        
+      
+        
+      
+        
+     $("#loading").hide();
+    }; // <--- this code instead of $.ajax(lala)   
+    
+    
+  function makeLapLengthDistanceEditable()
+  {
+  $('#lap-length').removeAttr('disabled');
+  $('#race-dist').removeAttr('disabled');
+  
+  }
+    
+ // Code to update lap distance and starting position when race is changed
+ function race_changed(element)
+ {
+ 
+ var selectedRace = $(element).find(":selected").text();
+  console.log( "Selected race: " + selectedRace );
+ 
+if ($('#auto-update-races').is(':checked'))
+{ 
+  
+   $.get('/race_lookup/', {race: selectedRace}, function(data){
+    var d = $.parseJSON(data);
+            console.log(d['lap_length'] + ', ' + d['start_location']);
+                
+               $('#lap-length').val(d['lap_length']);
+               $('#race-dist').val(d['distance']);
+                              $('#split-distances').val(d['splits']);
+               
+               
+    });
+  
+  }
+  else
+  {
+  console.log('Not auto updating race start and lap length');
+  }
+  
+}
+
+</script>
+
+
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  }
+})});
+</script>
+
+
+{% block additionalHeadItems %}
+{% endblock %}
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+   <!-- Fixed navbar -->
+    <header class="navbar  navbar-inverse navbar-fixed-top" id="top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Track Splits</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+          
+            
+            <li><a href="/">Home</a></li>
+              {% if stravaSessionExists %} 
+<li><a href="/activities/">Strava Activities</a></li>
+   {% endif %}
+              <li><a href="/uploadActivity/">Upload Activity</a></li>
+            <li><a href="/about/">About</a></li>
+          
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </header>
+
+   
+   
+   
+       
+          
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+     <div class="container" role="main">
+
+     
+      <div class="jumbotron" id="main-jumbo">
+        {% block title %}{% endblock %}
+        
+        {% block content %} {% endblock %}
+       
+      </div>
+      
+      {% block belowJumbotron %}
+      
+      {% endblock %}
+    
+
+   
+
+      <hr>
+
+      <footer>
+        <p><a href="http://www.strava.com/"><img src={% static "/cptblWith_strava_light/api_logo_cptblWith_strava_horiz_light.png" %} alt="Powered by Strava" class="powered-by-strava"/></a> </p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+    <script>window.jQuery || document.write('<script src="{% static '/bootstrap/js/jquery.min.js'%} "><\/script>')</script>
+    
+    <!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!--<script src='{% static "/bootstrap/js/bootstrap.min.js" %} '></script>-->
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src='{% static "/bootstrap/js/ie10-viewport-bug-workaround.js" %} '></script>
+    
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+  </body>
+</html>
