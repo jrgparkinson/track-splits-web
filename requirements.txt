@@ -20,7 +20,7 @@ python-dateutil==2.6.1
 pytz==2017.3
 requests>=2.20.0
 six==1.11.0
-stravalib==0.7.0
+stravalib==0.10.2
 units==0.7
 urllib3>=1.24.2
 virtualenv==15.1.0
