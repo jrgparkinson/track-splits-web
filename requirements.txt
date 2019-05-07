@@ -22,7 +22,7 @@ requests>=2.20.0
 six==1.11.0
 stravalib==0.10.2
 units==0.7
-urllib3>=1.24.2
+urllib3<1.25,>=1.21.1
 virtualenv==15.1.0
 virtualenv-clone==0.2.6
 whitenoise==3.2
