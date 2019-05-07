@@ -411,18 +411,21 @@ def get_all_activities(client, athlete_id, since=None):
         print('Got activities from strava')
 
     for act in stravaActivities:
-        workoutType = act.workout_type
+        workoutType = int(act.workout_type)
         if not workoutType:
             workoutType = 0
+            
+        print('Adding activity: ' + act.name + ", " + str(act.moving_time))
+            
         modelActivity, created = Activity.objects.get_or_create(activity_id=act.id, name=act.name,
                                                                 moving_time=act.moving_time, date=act.start_date,
-                                                                athlete_id=athlete_id, workout_type=int(workoutType))
+                                                                athlete_id=athlete_id, workout_type=workoutType)
 
         if created:
-            print('Added activity: ' + act.name + ", " + str(act.moving_time))
+            print('Done')
         else:
 
-            print('Already had activity: ' + act.name + ", " + str(act.moving_time))
+            print('Already had activity')
 
         modelActivity.save()
 
