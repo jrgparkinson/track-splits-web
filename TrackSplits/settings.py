@@ -36,6 +36,9 @@ if 'Jamie-PC' in host:
 else:
     print('Debugging off')
     DEBUG = False
+    
+print('Debugging on override')
+DEBUG = True
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
