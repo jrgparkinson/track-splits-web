@@ -431,11 +431,13 @@ class ActivitiesView(TemplateView):
             self.request.session['access_token'] = None
             print('No access_token')
             return
+        
+        print('Activities view')
 
         client = Client()
         client.access_token = self.request.session['access_token']
         athlete = client.get_athlete()
-        #print("For athlete id: {id}, I now have an access token: {token}".format(id=athlete.id, token=client.access_token))
+        print("For athlete id: {id}, I now have an access token: {token}".format(id=athlete.id, token=client.access_token))
 
         context = super(ActivitiesView, self).get_context_data(**kwargs)
 
@@ -443,7 +445,7 @@ class ActivitiesView(TemplateView):
 
         # First try and get all activities for this athlete from the DB, to avoid hitting strava
         activities = Activity.objects.all().filter(athlete_id=self.request.session['athlete_id'])
-        #print('Activities found: ' + str(activities))
+        print('Activities found: ' + str(activities))
 
 
         if len(activities) == 0:
