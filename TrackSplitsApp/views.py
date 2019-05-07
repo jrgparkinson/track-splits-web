@@ -732,7 +732,7 @@ def handler404(request, exception):
     return render(request, '404.html', data)
 
 
-def handler500(request, exception):
+def handler500(request):
     data = {}
     return render(request, '500.html', data)
 
