@@ -321,6 +321,12 @@ def get_splits(latlng, times, guessed_race_distance, track_length, laps, lap_ind
 
     return [splits, trackFit]
 
+def one_week_ago():
+    today = DT.date.today()
+    week_ago = today - DT.timedelta(days=7)
+    since = week_ago.isoformat()
+    
+    return since
 
 class ReloadActivitiesView(RedirectView):
     def get(self, request, *args, **kwargs):
@@ -335,9 +341,7 @@ class ReloadActivitiesView(RedirectView):
         since = None
 
         if period == 'week':
-            today = DT.date.today()
-            week_ago = today - DT.timedelta(days=7)
-            since = week_ago.isoformat()
+            since = one_week_ago()
 
         # This gets and saves all activities
         get_all_activities(client, self.request.session['athlete_id'], since)
@@ -452,12 +456,9 @@ class ActivitiesView(TemplateView):
 
         context = super(ActivitiesView, self).get_context_data(**kwargs)
 
-        start_date = '2019-04-01'
-
         # First try and get all activities for this athlete from the DB, to avoid hitting strava
         activities = Activity.objects.all().filter(athlete_id=self.request.session['athlete_id'])
         print('Activities found: ' + str(activities))
-
 
         if len(activities) == 0:
             print('No activities for athlete, querying Strava')
