@@ -365,6 +365,8 @@ class AuthenticateView(RedirectView):
         if code:
             client.access_token = client.exchange_code_for_token(client_id=settings.STRAVA_CLIENT_ID,
                                                                  client_secret=settings.STRAVA_SECRET, code=code)
+            
+            print('Got access token: %s' % client.access_token)
 
             athlete = client.get_athlete()
 
