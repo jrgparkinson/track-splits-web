@@ -177,8 +177,8 @@ class HomeView(TemplateView):
 
             # Remove this eventually!!
             # Just remove my (Jamie's) activities
-            if athlete.id == 1619378:
-                Activity.objects.filter(athlete_id=athlete.id).delete()
+            # if athlete.id == 1619378:
+            #     Activity.objects.filter(athlete_id=athlete.id).delete()
 
         return context
 
@@ -447,7 +447,7 @@ class ActivitiesView(TemplateView):
 
         context = super(ActivitiesView, self).get_context_data(**kwargs)
 
-        #start_date = '2017-05-01'
+        start_date = '2019-04-01'
 
         # First try and get all activities for this athlete from the DB, to avoid hitting strava
         activities = Activity.objects.all().filter(athlete_id=self.request.session['athlete_id'])
