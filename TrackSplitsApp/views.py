@@ -179,8 +179,8 @@ class HomeView(TemplateView):
 
             # Remove this eventually!!
             # Just remove my (Jamie's) activities
-            #if athlete.id == 1619378:
-            Activity.objects.filter(athlete_id=athlete.id).delete()
+            if athlete.id == 1619378:
+                Activity.objects.filter(athlete_id=athlete.id).delete()
 
         return context
 
