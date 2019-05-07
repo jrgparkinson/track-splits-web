@@ -412,7 +412,7 @@ def get_all_activities(client, athlete_id, since=None):
 
     for act in stravaActivities:
         
-        if not workoutType:
+        if not act.workout_type:
             workoutType = 0
         else:
             workoutType = int(act.workout_type)
