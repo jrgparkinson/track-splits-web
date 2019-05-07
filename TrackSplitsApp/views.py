@@ -411,9 +411,11 @@ def get_all_activities(client, athlete_id, since=None):
         print('Got activities from strava')
 
     for act in stravaActivities:
-        workoutType = int(act.workout_type)
+        
         if not workoutType:
             workoutType = 0
+        else:
+            workoutType = int(act.workout_type)
             
         print('Adding activity: ' + act.name + ", " + str(act.moving_time))
             
