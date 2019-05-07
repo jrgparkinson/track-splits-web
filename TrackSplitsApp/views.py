@@ -8,10 +8,8 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 import numpy as np
-# import math
 import django_tables2 as tables
 import sys
-#sys.path.insert(0, './TrackSplitsApp/track-splits')
 from .TrackFit import TrackFit as TF
 from TrackSplitsApp.models import Activity, Athlete
 import json
