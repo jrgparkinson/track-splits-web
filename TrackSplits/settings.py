@@ -37,8 +37,8 @@ else:
     print('Debugging off')
     DEBUG = False
     
-print('Debugging on override')
-DEBUG = True
+#print('Debugging on override')
+#DEBUG = True
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
