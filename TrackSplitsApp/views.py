@@ -711,7 +711,7 @@ def generate_split_distances_race(race):
     return generate_split_distances(distance, interval)
     
 def generate_split_distances(distance, interval):
-    if race['distance'] > 2000:
+    if distance > 2000:
         interval = 1000
 
     i = 1
