@@ -707,6 +707,10 @@ def generate_split_distances(race):
 
     distance = race['distance']
     interval = race['lap_length']
+    
+    return generate_split_distances(distance, interval)
+    
+def generate_split_distances(distance, interval):
     if race['distance'] > 2000:
         interval = 1000
 
