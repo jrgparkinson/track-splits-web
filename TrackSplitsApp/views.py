@@ -105,7 +105,7 @@ def upload_file(request):
             # guessed_race_distance = 5000
 
 
-            split_distances = generate_split_distances(race)
+            split_distances = generate_split_distances_race(race)
 
             # race = races[guessed_race_distance]
             stravaSessionExists = False
@@ -307,7 +307,7 @@ def race_lookup(request):
 
     #race['start_location'] = race['lap_length'] - race['distance'] % race['lap_length']
 
-    split_distances = generate_split_distances(race)
+    split_distances = generate_split_distances_race(race)
     split_strs = [str(split) for split in split_distances]
     race['splits'] = ','.join(split_strs)
 
@@ -611,7 +611,7 @@ class ActivityView(TemplateView):
         # Use 400m splits for 2000m races or less, 1k for longer
 
 
-        split_distances = generate_split_distances(race)
+        split_distances = generate_split_distances_race(race)
         # splits = trackFit.compute_splits(split_distances)
 
         [splits, trackFit] = get_splits(latlng, times, race['distance'], race['lap_length'], laps, lap_index,
@@ -702,7 +702,7 @@ laps,                          lap_index=-1
 
     return context
 
-def generate_split_distances(race):
+def generate_split_distances_race(race):
     #track_length = race['lap_length']
 
     distance = race['distance']
