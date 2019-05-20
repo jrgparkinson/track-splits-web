@@ -4,6 +4,7 @@ from django.views.generic import TemplateView, RedirectView
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from stravalib.client import Client
+import stravalib
 from django.conf import settings
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
