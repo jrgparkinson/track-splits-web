@@ -162,18 +162,29 @@ class HomeView(TemplateView):
         context['authenticateLink'] = authorize_url
 
         if user_connected(self.request):
-            context['stravaSessionExists'] = True
 
             client.access_token = self.request.session['access_token']
-            athlete = client.get_athlete()
-            context['athlete'] = athlete
-
-            context['firstTime'] = False
+            
             try:
-                context['firstTime'] = self.request.session['first_time']
+                athlete = client.get_athlete()
+                context['stravaSessionExists'] = True
+                
+            except stravalib.exc.AccessUnauthorized:
+                print('Exception - stravalib.exc.AccessUnauthorized')
+                
             except:
-                pass
-            self.request.session['first_time'] = False
+                print('An error occured getting the athlete which we do not recognise')
+                
+                
+            if context['stravaSessionExists']:
+                context['athlete'] = athlete
+
+                context['firstTime'] = False
+                try:
+                    context['firstTime'] = self.request.session['first_time']
+                except:
+                    pass
+                self.request.session['first_time'] = False
 
             # Remove this eventually!!
             # Just remove my (Jamie's) activities
