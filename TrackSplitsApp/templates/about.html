@@ -9,7 +9,8 @@
 
 {% block content %}
    
-     <p>This is a small app to analyse GPS data from track races and calculate split times at arbitrary intervals. We currently only support GPS data from Strava, but analysis of arbitrary .gpx files should be coming soon. </p>
+     <p>This is a small app to analyse GPS data from track races and calculate split times at arbitrary intervals. 
+        You can either load activities from Strava, or upload your own .gpx file for analysis. </p>
      
      
 {% endblock %}
@@ -27,6 +28,8 @@
              <ul>
              
      <li>Bug fixes to the split calculation algorithm, as some GPS tracks aren't currently interpreted correctly.</li>
+     <li>Better support for steeplechase, where the track is slightly different (especially when the jump is on the outside of the bend). 
+        At the moment, steeplechase events are mapped onto a standard 400m track.</li>
      </ul>
 
             </div>
